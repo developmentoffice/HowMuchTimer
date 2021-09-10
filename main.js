@@ -30,23 +30,6 @@ class App
     initTray()
     {
         this.tray = new Tray(path.join(__dirname, 'images/icons/16x16.png'))
-
-        // const contextMenu = Menu.buildFromTemplate([
-        //     {
-        //         label: 'Восстановить окно',
-        //         click: () => {
-        //             this.win.show()
-        //         }
-        //     },
-        //     { type: 'separator' },
-        //     {
-        //         label: 'Выйти',
-        //         click: () => {
-        //             this.onCloseApp()
-        //         }
-        //     }
-        // ])
-        // tray.setContextMenu(contextMenu)
     }
     createWindow()
     {
@@ -61,7 +44,6 @@ class App
             minimizable: false,
             maximizable: false,
             alwaysOnTop: true,
-            // frame: false,
             webPreferences: {
                 preload: path.join(__dirname, 'scripts/preload.js'),
                 contextIsolation: false
