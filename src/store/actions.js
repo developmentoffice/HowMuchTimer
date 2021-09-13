@@ -57,6 +57,7 @@ export default {
         commit(type.SET_ACTIVE_TASK, 0)
         commit(type.RESET_TIMER)
         dispatch('getTasks')
+        dispatch('getStatistic')
     },
     async getTimerValues({ commit, state }) {
         const timer = await action('timer', { send: 'request', on: 'get' }, state.activeTask)

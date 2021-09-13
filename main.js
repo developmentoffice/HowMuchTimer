@@ -1,5 +1,13 @@
 const path = require('path')
-const { app, BrowserWindow, Tray, screen, ipcMain, Menu } = require('electron')
+const {
+    app,
+    BrowserWindow,
+    Tray,
+    screen,
+    ipcMain,
+    Menu,
+    nativeImage
+} = require('electron')
 const Model = require('./db/model.js')
 
 class App
@@ -29,7 +37,7 @@ class App
     }
     initTray()
     {
-        this.tray = new Tray(path.join(__dirname, 'images/icons/16x16.png'))
+        this.tray = new Tray(nativeImage.createFromPath(path.join(__dirname, 'images/icons/16.png')))
     }
     createWindow()
     {
@@ -39,7 +47,7 @@ class App
             height: this.winHeight,
             x: screenSize.width - this.winWidth,
             y: 0,
-            icon: path.join(__dirname, 'images/icons/512x512.png'),
+            icon: nativeImage.createFromPath(path.join(__dirname, 'images/icons/512.png')),
             resizable: false,
             minimizable: false,
             maximizable: false,

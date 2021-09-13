@@ -45,15 +45,13 @@
       "makers": [
         {
           "name": "@electron-forge/maker-deb",
-          "config": {}
+          "config": {
+            "options": {
+              "icon": "./images/icons/512.png"
+            }
+          }
         }
       ]
-    }
-  },
-  "build": {
-    "icon": "./images/icons/512x512.png",
-    "linux": {
-      "icon": "./images/icons/"
     }
   }
 }
