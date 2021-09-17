@@ -7,7 +7,6 @@ class Model
     constructor()
     {
         const dbFile = app.getPath('userData') + '/data.db'
-        console.log(dbFile);
         access(dbFile, constants.F_OK, (err) => {
             if (err) {
                 writeFile(dbFile, '', (err) => {

@@ -21,7 +21,11 @@
                         >{{ T('menu.settings') }}</router-link>
                         <div class="navbar-item">
                             <div class="select">
-                                <select v-model="activeTask" :disabled="timer === 'start'">
+                                <select
+                                    v-model="activeTask"
+                                    :disabled="timer === 'start'"
+                                    :title="activeTaskName"
+                                >
                                     <option value="0">{{ T('choose_task') }}</option>
                                     <option
                                         v-for="item in tasks"
@@ -127,6 +131,11 @@ export default {
             set(id) {
                 this.$store.dispatch('setActiveTask', parseInt(id))
             }
+        },
+        activeTaskName() {
+            const task = this.tasks.find(el => el.id === this.activeTask)
+            if (task) return task.name
+            return this.T('choose_task')
         }
     },
     components: {
