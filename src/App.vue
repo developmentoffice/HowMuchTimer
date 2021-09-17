@@ -138,7 +138,8 @@ export default {
         await this.$store.dispatch('getTasks')
         await this.$store.dispatch('getStatistic')
         if (this.setting('task_id')) this.activeTask = this.setting('task_id')
-        window.ipcRenderer.on('close', event => {
+
+        window.electron.on('close', event => {
             this.close()
         })
         this.isAppReady = true
@@ -153,7 +154,7 @@ export default {
                     show: true
                 })
             } else {
-                window.ipcRenderer.send('close-window')
+                window.electron.send('close-window')
             }
         },
         delTask() {
@@ -182,7 +183,7 @@ export default {
                 this.resetModal()
             } else if (this.warningModal.type === 'close') {
                 await this.$store.dispatch('stop')
-                window.ipcRenderer.send('close-window')
+                window.electron.send('close-window')
             }
         },
         async changeLanguage(event) {

@@ -53,8 +53,7 @@ class App
             maximizable: false,
             alwaysOnTop: true,
             webPreferences: {
-                preload: path.join(__dirname, 'scripts/preload.js'),
-                contextIsolation: false
+                preload: path.join(__dirname, 'scripts/preload.js')
             }
         })
         this.win.removeMenu()
@@ -96,60 +95,60 @@ class App
     }
     initDBEvents()
     {
-        ipcMain.on('request-settings', async (event) => {
+        ipcMain.handle('settings', async (event) => {
             const settings = await this.model.getSettings()
-            this.win.webContents.send('get-settings', settings)
+            return settings
         })
-        ipcMain.on('save-setting', async (event, args) => {
+        ipcMain.handle('settings-save', async (event, args) => {
             await this.model.setSettings(args)
-            this.win.webContents.send('success-setting')
+            return true
         })
-        ipcMain.on('request-tasks', async (event) => {
+        ipcMain.handle('tasks', async (event) => {
             const tasks = await this.model.getTasks()
-            this.win.webContents.send('get-tasks', tasks)
+            return tasks
         })
-        ipcMain.on('request-statistic', async (event) => {
-            const statistic = await this.model.getStatistic()
-            this.win.webContents.send('get-statistic', statistic)
-        })
-        ipcMain.on('add-task', async (event, task) => {
+        ipcMain.handle('tasks-add', async (event, task) => {
             const taskId = await this.model.addTask(task)
-            this.win.webContents.send('success-task', taskId)
+            return taskId
         })
-        ipcMain.on('del-task', async (event, id) => {
+        ipcMain.handle('tasks-del', async (event, id) => {
             await this.model.delTask(id)
-            this.win.webContents.send('success-task')
+            return true
         })
-        ipcMain.on('request-start', async (event, args) => {
+        ipcMain.handle('tasks-active', async (event, id) => {
+            await this.model.setTask(id)
+            return true
+        })
+        ipcMain.handle('timer', async (event, taskId) => {
+            const timer = await this.model.getTimer(taskId)
+            return timer
+        })
+        ipcMain.handle('timer-start', async (event, args) => {
             const timerId = await this.model.timerStart(args)
             this.isTaskRunning = true
-            this.win.webContents.send('get-start', timerId)
+            return timerId
         })
-        ipcMain.on('request-stop', async (event, args) => {
+        ipcMain.handle('timer-stop', async (event, args) => {
             await this.model.timerStop(args)
-            this.win.webContents.send('success-stop')
             this.isTaskRunning = false
             this.tray.setToolTip(this.dict.no_running_tasks)
+            return true
         })
-        ipcMain.on('request-end', async (event, id) => {
+        ipcMain.handle('timer-end', async (event, id) => {
             await this.model.timerEnd(id)
-            this.win.webContents.send('success-end')
             this.tray.setToolTip(this.dict.no_running_tasks)
+            return true
         })
-        ipcMain.on('request-timer', async (event, taskId) => {
-            const timer = await this.model.getTimer(taskId)
-            this.win.webContents.send('get-timer', timer)
-        })
-        ipcMain.on('save-language', async (event, lang) => {
-            await this.model.setLanguage(lang)
-            this.win.webContents.send('success-language')
-        })
-        ipcMain.on('save-task', async (event, id) => {
-            await this.model.setTask(id)
-            this.win.webContents.send('success-task')
-        })
-        ipcMain.on('update-timer', async (event, args) => {
+        ipcMain.on('timer-update', async (event, args) => {
             this.tray.setToolTip(`${args.task.name}: ${args.time}, ${args.price}`)
+        })
+        ipcMain.handle('statistic', async (event) => {
+            const statistic = await this.model.getStatistic()
+            return statistic
+        })
+        ipcMain.handle('language-save', async (event, lang) => {
+            await this.model.setLanguage(lang)
+            return true
         })
     }
 }
