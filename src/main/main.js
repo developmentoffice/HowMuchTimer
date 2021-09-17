@@ -8,7 +8,7 @@ const {
     Menu,
     nativeImage
 } = require('electron')
-const Model = require('./db/model.js')
+const Model = require('../../db/model.js')
 
 class App
 {
@@ -37,7 +37,7 @@ class App
     }
     initTray()
     {
-        this.tray = new Tray(nativeImage.createFromPath(path.join(__dirname, 'images/icons/16.png')))
+        this.tray = new Tray(nativeImage.createFromPath(path.join(__dirname, '../../images/icons/16.png')))
     }
     createWindow()
     {
@@ -47,17 +47,17 @@ class App
             height: this.winHeight,
             x: screenSize.width - this.winWidth,
             y: 0,
-            icon: nativeImage.createFromPath(path.join(__dirname, 'images/icons/512.png')),
+            icon: nativeImage.createFromPath(path.join(__dirname, '../../images/icons/512.png')),
             resizable: false,
             minimizable: false,
             maximizable: false,
             alwaysOnTop: true,
             webPreferences: {
-                preload: path.join(__dirname, 'scripts/preload.js')
+                preload: path.join(__dirname, '../renderer/preload.js')
             }
         })
         this.win.removeMenu()
-        this.win.loadFile('index.html')
+        this.win.loadFile('../renderer/index.html')
         this.win.on('close', event => {
             event.preventDefault()
             this.onCloseApp()

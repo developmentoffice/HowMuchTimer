@@ -6,10 +6,10 @@ const { VueLoaderPlugin } = require('vue-loader')
 module.exports = {
     mode: process.env.NODE_ENV,
     entry: {
-        build: ['core-js/stable', 'regenerator-runtime/runtime', './src/main.js']
+        build: ['core-js/stable', 'regenerator-runtime/runtime', './src/renderer/main.js']
     },
     output: {
-        path: path.resolve(__dirname, './scripts'),
+        path: path.resolve(__dirname, './src/renderer/build'),
         filename: 'app.js'
     },
     module: {
@@ -27,7 +27,7 @@ module.exports = {
                 test: /\.(gif|jpg|png|svg|ico|eot|woff|woff2|pdf|txt)$/,
                 loader: 'file-loader',
                 options: {
-                    context: path.resolve(__dirname, './src'),
+                    context: path.resolve(__dirname, './src/renderer'),
                     name: '[path][name].[ext]?[fullhash]'
                 }
             }
@@ -35,8 +35,7 @@ module.exports = {
     },
     resolve: {
         alias: {
-            'vue$': 'vue/dist/vue.esm.js',
-            '@': path.resolve(__dirname, './src')
+            '@': path.resolve(__dirname, './src/renderer')
         },
         extensions: ['.js', '.vue']
     },

@@ -6,9 +6,9 @@
   "license": "MIT",
   "main": "main.js",
   "scripts": {
-    "start": "electron .",
-    "appwatch": "cross-env NODE_ENV=development webpack --watch",
-    "appbuild": "cross-env NODE_ENV=production webpack --progress",
+    "start": "electron src/main/main.js",
+    "renderer_watch": "cross-env NODE_ENV=development webpack --watch",
+    "renderer_build": "cross-env NODE_ENV=production webpack --progress",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "rebuild": "electron-rebuild -f -w better-sqlite3"
