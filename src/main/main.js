@@ -57,7 +57,7 @@ class App
             }
         })
         this.win.removeMenu()
-        this.win.loadFile('../renderer/index.html')
+        this.win.loadFile('src/renderer/index.html')
         this.win.on('close', event => {
             event.preventDefault()
             this.onCloseApp()
