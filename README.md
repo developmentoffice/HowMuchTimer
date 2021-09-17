@@ -38,7 +38,9 @@ sudo dpkg -P howmuchtimer
 ## Development
 `npm start` - run the main process
 
-`npm run appwatch` - run watch and build renderer process
+`npm run renderer_watch` - watch renderer files
+
+`npm run renderer_build` - build renderer script
 
 `npm run make` - make binary
 
