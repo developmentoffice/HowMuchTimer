@@ -73,7 +73,26 @@ export default {
             return (this.timerValues.price + this.priceSettings.val / 3600 * this.seconds).toFixed(2)
         }
     },
+    created() {
+        window.electron.on('timer-start', event => {
+            this.redirectToTimer()
+            this.start()
+        })
+        window.electron.on('timer-pause', event => {
+            this.redirectToTimer()
+            this.stop()
+        })
+        window.electron.on('timer-end', event => {
+            this.redirectToTimer()
+            this.endModal = true
+        })
+    },
     methods: {
+        redirectToTimer() {
+            if (this.$route.name !== 'timer') {
+                this.$router.push('/')
+            }
+        },
         start() {
             this.$store.dispatch('start')
             const start = Date.now()

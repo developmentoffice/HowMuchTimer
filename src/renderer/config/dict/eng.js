@@ -44,5 +44,6 @@ export default {
         end: 'End'
     },
     end_task_warning: 'End task?',
-    no_running_tasks: 'There are no running tasks'
+    no_running_tasks: 'There are no running tasks',
+    restore_window: 'Restore window'
 }

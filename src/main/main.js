@@ -9,18 +9,20 @@ const {
     nativeImage
 } = require('electron')
 const Model = require('../../db/model.js')
+if (require('electron-squirrel-startup')) return app.quit()
 
 class App
 {
     constructor()
     {
-        this.debug = false
+        this.debug = true
         this.winWidth = 800
         this.winHeight = 400
         this.win = null
         this.tray = null
         this.model = new Model()
         this.dict = {}
+        this.activeTask = ''
         this.isTaskRunning = false
 
         app.whenReady()
@@ -30,6 +32,7 @@ class App
                 this.initDBEvents()
                 this.initTray()
                 await this.getDict()
+                await this.getActiveTaskName()
         })
         app.on('window-all-closed', () => {
             if (process.platform !== 'darwin') app.quit()
@@ -38,6 +41,51 @@ class App
     initTray()
     {
         this.tray = new Tray(nativeImage.createFromPath(path.join(__dirname, '../../images/icons/16.png')))
+    }
+    trayContextMenu()
+    {
+        let template = []
+        template.push({
+            label: this.dict.restore_window,
+            click: () => {
+                this.win.show()
+            }
+        })
+        if (this.activeTask.length > 0) {
+            template.push({ type: 'separator' })
+            if (this.isTaskRunning) {
+                template.push({
+                    label: `${this.dict.timer_pause}: ${this.activeTask}`,
+                    click: () => {
+                        this.win.webContents.send('timer-pause')
+                    }
+                })
+            } else {
+                template.push({
+                    label: `${this.dict.timer_start}: ${this.activeTask}`,
+                    click: () => {
+                        this.win.webContents.send('timer-start')
+                    }
+                })
+                template.push({
+                    label: `${this.dict.timer_end}: ${this.activeTask}`,
+                    click: () => {
+                        this.win.show()
+                        this.win.webContents.send('timer-end')
+                    }
+                })
+            }
+        }
+        template.push({ type: 'separator' })
+        template.push({
+            label: this.dict.exit,
+            click: () => {
+                this.onCloseApp()
+            }
+        })
+
+        const contextMenu = Menu.buildFromTemplate(template)
+        this.tray.setContextMenu(contextMenu)
     }
     createWindow()
     {
@@ -49,7 +97,7 @@ class App
             y: 0,
             icon: nativeImage.createFromPath(path.join(__dirname, '../../images/icons/512.png')),
             resizable: false,
-            minimizable: false,
+            minimizable: true,
             maximizable: false,
             alwaysOnTop: true,
             webPreferences: {
@@ -58,6 +106,9 @@ class App
         })
         this.win.removeMenu()
         this.win.loadFile('src/renderer/index.html')
+        this.win.on('restore', event => {
+            this.win.setSize(this.winWidth, this.winHeight)
+        })
         this.win.on('close', event => {
             event.preventDefault()
             this.onCloseApp()
@@ -89,6 +140,16 @@ class App
             ipcMain.on('dict', (event, dict) => {
                 this.dict = dict
                 if (this.isTaskRunning === false) this.tray.setToolTip(this.dict.no_running_tasks)
+                resolve()
+            })
+        })
+    }
+    getActiveTaskName()
+    {
+        return new Promise((resolve, reject) => {
+            ipcMain.on('active-task-name', (event, name) => {
+                this.activeTask = name
+                if (process.platform === 'win32') this.trayContextMenu()
                 resolve()
             })
         })
@@ -126,12 +187,14 @@ class App
         ipcMain.handle('timer-start', async (event, args) => {
             const timerId = await this.model.timerStart(args)
             this.isTaskRunning = true
+            if (process.platform === 'win32') this.trayContextMenu()
             return timerId
         })
         ipcMain.handle('timer-stop', async (event, args) => {
             await this.model.timerStop(args)
             this.isTaskRunning = false
             this.tray.setToolTip(this.dict.no_running_tasks)
+            if (process.platform === 'win32') this.trayContextMenu()
             return true
         })
         ipcMain.handle('timer-end', async (event, id) => {

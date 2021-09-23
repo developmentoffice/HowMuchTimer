@@ -17,13 +17,12 @@ export default {
     async addTask({ commit, dispatch }, task) {
         const taskId = await window.electron.invoke('tasks-add', task)
         dispatch('getTasks')
-        commit(type.SET_ACTIVE_TASK, taskId)
+        dispatch('setActiveTask', taskId)
         commit(type.RESET_TIMER)
     },
     async delTask({ commit, dispatch }, id) {
         await window.electron.invoke('tasks-del', id)
-        commit(type.SET_ACTIVE_TASK, 0)
-        commit(type.RESET_TIMER)
+        dispatch('setActiveTask', 0)
         dispatch('getTasks')
     },
     async setActiveTask({ commit, dispatch }, id) {
@@ -34,6 +33,20 @@ export default {
             commit(type.RESET_TIMER)
         }
         await window.electron.invoke('tasks-active', id)
+        dispatch('activeTaskName')
+    },
+    async activeTaskName({ state })
+    {
+        return new Promise((resolve, reject) => {
+            let name = ''
+            if (state.activeTask === 0) name = ''
+            else {
+                const task = state.tasks.find(el => el.id === state.activeTask)
+                name = task.name
+            }
+            window.electron.send('active-task-name', name)
+            resolve()
+        })
     },
     async start({ commit, getters, state }) {
         const timerId = await window.electron.invoke('timer-start', {
@@ -54,8 +67,7 @@ export default {
     },
     async end({ commit, dispatch, state }) {
         await window.electron.invoke('timer-end', state.activeTask)
-        commit(type.SET_ACTIVE_TASK, 0)
-        commit(type.RESET_TIMER)
+        dispatch('setActiveTask', 0)
         dispatch('getTasks')
         dispatch('getStatistic')
     },
@@ -63,7 +75,7 @@ export default {
         commit(type.SET_SECONDS, seconds)
         const s = seconds + state.timerValues.seconds
         if (s % 10 === 0) {
-            const task = state.tasks.find(id => state.activeTask)
+            const task = state.tasks.find(el => el.id === state.activeTask)
             const price = getters.priceSettings
             if (task) {
                 const args = {
@@ -92,11 +104,14 @@ export default {
     async dict() {
         return new Promise((resolve, reject) => {
             window.electron.send('dict', {
-                no_running_tasks: mixins.methods.T('no_running_tasks')
+                no_running_tasks: mixins.methods.T('no_running_tasks'),
+                exit: mixins.methods.T('exit'),
+                restore_window: mixins.methods.T('restore_window'),
+                timer_start: mixins.methods.T('timer.start'),
+                timer_pause: mixins.methods.T('timer.pause'),
+                timer_end: mixins.methods.T('timer.end')
             })
             resolve()
         })
-    },
-
-
+    }
 }

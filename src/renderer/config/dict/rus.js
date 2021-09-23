@@ -44,5 +44,6 @@ export default {
         end: 'Завершить'
     },
     end_task_warning: 'Завершить задачу?',
-    no_running_tasks: 'Запущенных задач нет'
+    no_running_tasks: 'Запущенных задач нет',
+    restore_window: 'Восстановить окно'
 }

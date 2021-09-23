@@ -147,7 +147,6 @@ export default {
         await this.$store.dispatch('getTasks')
         await this.$store.dispatch('getStatistic')
         if (this.setting('task_id')) this.activeTask = this.setting('task_id')
-
         window.electron.on('close', event => {
             this.close()
         })

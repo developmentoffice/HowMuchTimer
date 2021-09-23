@@ -50,6 +50,15 @@
               "icon": "./images/icons/512.png"
             }
           }
+        },
+        {
+          "name": "@electron-forge/maker-squirrel",
+          "config": {
+            "setupExe": "HowMuchTimer",
+            "copyright": "Alex Novikov",
+            "setupIcon": "./images/icons/256.ico",
+            "iconUrl": "https://raw.githubusercontent.com/developmentoffice/HowMuchTimer/master/images/icons/256.ico"
+          }
         }
       ]
     }
