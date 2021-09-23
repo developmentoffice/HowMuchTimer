@@ -15,7 +15,7 @@ class App
 {
     constructor()
     {
-        this.debug = true
+        this.debug = false
         this.winWidth = 800
         this.winHeight = 400
         this.win = null
