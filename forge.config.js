@@ -15,7 +15,8 @@ module.exports = {
             name: 'HowMuchTimer',
             copyright: 'Alex Novikov',
             setupIcon: path.join(__dirname, '/images/icons/256.ico'),
-            iconUrl: 'https://raw.githubusercontent.com/developmentoffice/HowMuchTimer/master/images/icons/256.ico'
+            iconUrl: 'https://raw.githubusercontent.com/developmentoffice/HowMuchTimer/master/images/icons/256.ico',
+            loadingGif: path.join(__dirname, '/images/loading.gif')
         }
     }]
 }
