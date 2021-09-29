@@ -37,7 +37,7 @@ Link: [https://github.com/developmentoffice/HowMuchTimer/releases/download/v1.0.
 ![tray](preview/win_tray.png)
 
 
-## Remove
+## Remove (debian)
 ```bash
 sudo dpkg -P howmuchtimer
 ```
