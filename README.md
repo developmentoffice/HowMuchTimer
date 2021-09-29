@@ -1,7 +1,8 @@
 # HowMuchTimer
 Customizable developer timer to track time spent and money earned. Available in multiple languages.
 
-## Installation (Deb package only)
+## Installation
+### Deb package
 Link: [https://github.com/developmentoffice/HowMuchTimer/releases/download/v1.0.0/howmuchtimer-1.0.0-amd64.deb](https://github.com/developmentoffice/HowMuchTimer/releases/download/v1.0.0/howmuchtimer-1.0.0-amd64.deb)
 
 ```bash
@@ -9,6 +10,9 @@ wget https://github.com/developmentoffice/HowMuchTimer/releases/download/v1.0.0/
 sudo dpkg -i howmuchtimer-1.0.0-amd64.deb
 howmuchtimer
 ```
+
+### Windows
+Link: [https://github.com/developmentoffice/HowMuchTimer/releases/download/v1.0.0/howmuchtimer-1.0.0-win.exe](https://github.com/developmentoffice/HowMuchTimer/releases/download/v1.0.0/howmuchtimer-1.0.0-win.exe)
 
 ## Screenshots
 ### Main screen
@@ -28,6 +32,9 @@ howmuchtimer
 
 ### Statistics
 ![Statistics](preview/statistics.png)
+
+### Control active task from tray (windows only)
+![tray](preview/win_tray.png)
 
 
 ## Remove
