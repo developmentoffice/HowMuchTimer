@@ -87,6 +87,12 @@ class App
         const contextMenu = Menu.buildFromTemplate(template)
         this.tray.setContextMenu(contextMenu)
     }
+    resetTray()
+    {
+        this.tray.setImage(nativeImage.createFromPath(path.join(__dirname, '../../images/icons/16.png')))
+        this.tray.setImage(nativeImage.createFromPath(path.join(__dirname, '../../images/icons/16.png')))
+        this.tray.setToolTip(this.dict.no_running_tasks)
+    }
     createWindow()
     {
         const screenSize = screen.getPrimaryDisplay().size
@@ -139,7 +145,7 @@ class App
         return new Promise((resolve, reject) => {
             ipcMain.on('dict', (event, dict) => {
                 this.dict = dict
-                if (this.isTaskRunning === false) this.tray.setToolTip(this.dict.no_running_tasks)
+                if (this.isTaskRunning === false) this.resetTray()
                 resolve()
             })
         })
@@ -187,23 +193,25 @@ class App
         ipcMain.handle('timer-start', async (event, args) => {
             const timerId = await this.model.timerStart(args)
             this.isTaskRunning = true
+            this.tray.setImage(nativeImage.createFromPath(path.join(__dirname, '../../images/icons/16-active.png')))
             if (process.platform === 'win32') this.trayContextMenu()
             return timerId
         })
         ipcMain.handle('timer-stop', async (event, args) => {
             await this.model.timerStop(args)
             this.isTaskRunning = false
-            this.tray.setToolTip(this.dict.no_running_tasks)
+            this.resetTray()
             if (process.platform === 'win32') this.trayContextMenu()
             return true
         })
         ipcMain.handle('timer-end', async (event, id) => {
             await this.model.timerEnd(id)
-            this.tray.setToolTip(this.dict.no_running_tasks)
+            this.resetTray()
             return true
         })
         ipcMain.on('timer-update', async (event, args) => {
             this.tray.setToolTip(`${args.task.name}: ${args.time}, ${args.price}`)
+            this.tray.setImage(nativeImage.createFromPath(path.join(__dirname, '../../images/icons/16-active.png')))
         })
         ipcMain.handle('statistic', async (event) => {
             const statistic = await this.model.getStatistic()
