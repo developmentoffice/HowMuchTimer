@@ -31,6 +31,7 @@ export default {
         price: 'Стоимость'
     },
     end_task: 'Задача завершена',
+    task_statistics: 'Подробная статистика по задаче',
     total: 'Итого',
     task: {
         task: 'Задача',

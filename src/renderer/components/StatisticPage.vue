@@ -1,5 +1,5 @@
 <template>
-    <table class="table is-narrow">
+    <table class="table is-narrow is-hoverable">
         <thead>
             <tr>
                 <th>{{ T('statistic.task') }}</th>
@@ -9,23 +9,37 @@
             </tr>
         </thead>
         <tbody>
-            <tr
-                v-for="item in statisticSummary"
-                :class="{ 'has-background-primary-light': item.is_end }"
-                :title="item.is_end ? T('end_task') : ''"
-            >
-                <template v-if="item.totalPrice">
-                    <td colspan="4" class="has-text-centered has-background-link-light">
-                        <strong>{{ T('total') }}: {{ timeFormat(item.totalSeconds) }} ({{ item.totalPrice }} {{ T(priceSettings.dim) }})</strong>
-                    </td>
+            <template v-for="item in statisticSummary">
+                <tr
+                    class="toggle-row"
+                    :class="[
+                        'toggle-row',
+                        `task-${item.id}`,
+                        {
+                            'has-background-primary-light': item.isEnd,
+                            'has-background-danger-light': openId === item.id
+                        }
+                    ]"
+                    :title="item.isEnd ? T('end_task') : T('task_statistics')"
+                    @click="toggleStatistics(item.id)"
+                >
+                    <td><strong>{{ item.name }}</strong></td>
+                    <td><strong>{{ item.startDate | date }}<br>{{ item.endDate | date }}</strong></td>
+                    <td><strong>{{ timeFormat(item.totalSeconds) }}</strong></td>
+                    <td><strong>{{ item.totalPrice }} {{ T(priceSettings.dim) }}</strong></td>
+                </tr>
+                <template v-if="openId === item.id">
+                    <tr
+                        class="has-background-light"
+                        v-for="el in item.items"
+                    >
+                        <td>&nbsp;</td>
+                        <td>{{ el.dt | date }}</td>
+                        <td>{{ timeFormat(el.seconds) }}</td>
+                        <td>{{ el.price }} {{ T(priceSettings.dim) }}</td>
+                    </tr>
                 </template>
-                <template v-else>
-                    <td>{{ item.name }}</td>
-                    <td>{{ item.dt | date }}</td>
-                    <td>{{ timeFormat(item.seconds) }}</td>
-                    <td>{{ item.price }} {{ T(priceSettings.dim) }}</td>
-                </template>
-            </tr>
+            </template>
         </tbody>
     </table>
 </template>
@@ -38,7 +52,8 @@ export default {
     name: 'StatisticPage',
     data() {
         return {
-            timeFormat
+            timeFormat,
+            openId: null
         }
     },
     computed: {
@@ -46,6 +61,15 @@ export default {
             'priceSettings',
             'statisticSummary'
         ])
+    },
+    methods: {
+        toggleStatistics(id) {
+            if (this.openId === id) this.openId = null
+            else this.openId = id
+            this.$nextTick(() => {
+                this.$scrollTo(`.task-${id}`)
+            })
+        }
     }
 }
 </script>

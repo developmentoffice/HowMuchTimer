@@ -196,7 +196,7 @@ class Model
                 FROM tasks
                 LEFT JOIN timer ON timer.task_id = tasks.id
                 WHERE timer.seconds > 0
-                ORDER BY timer.task_id, timer.dt`).all()
+                ORDER BY timer.task_id DESC, timer.dt DESC`).all()
                 resolve(rows)
             } catch(e) {
                 reject()

@@ -9,6 +9,21 @@ Vue.filter('date', date)
 import globalMixin from '@/mixins/global'
 Vue.mixin(globalMixin)
 
+import VueScrollTo from 'vue-scrollto'
+Vue.use(VueScrollTo, {
+    container: 'body',
+    duration: 500,
+    easing: 'ease',
+    offset: -60,
+    force: true,
+    cancelable: true,
+    onStart: false,
+    onDone: false,
+    onCancel: false,
+    x: false,
+    y: true
+})
+
 window.addEventListener('DOMContentLoaded', () => {
     const app = new Vue({
         el: '#app',

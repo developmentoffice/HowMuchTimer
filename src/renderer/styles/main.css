@@ -18,6 +18,9 @@
 .disable-pointer-events {
     pointer-events: none;
 }
+.toggle-row {
+    cursor: pointer;
+}
 .preloader {
     position: fixed;
     width: 100%;

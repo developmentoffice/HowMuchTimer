@@ -31,6 +31,7 @@ export default {
         price: 'Cost'
     },
     end_task: 'Task completed',
+    task_statistics: 'Detailed task statistics',
     total: 'Total',
     task: {
         task: 'Task',

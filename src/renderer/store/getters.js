@@ -22,28 +22,52 @@ export default {
     },
     statisticSummary(state) {
         let ret = []
+        let items = []
+        let name = ''
+        let isEnd = false
         let id = 0
+        let startDate = null
+        let endDate = null
         let totalPrice = 0
         let totalSeconds = 0
         state.statistic.forEach(el => {
             if (el.id !== id) {
-                if (ret.length > 0) {
+                if (items.length > 0) {
                     ret.push({
+                        id,
+                        name,
+                        isEnd,
                         totalPrice: totalPrice.toFixed(2),
-                        totalSeconds
+                        totalSeconds,
+                        startDate,
+                        endDate,
+                        items
                     })
                 }
                 totalPrice = 0
                 totalSeconds = 0
+                startDate = el.dt
+                endDate = null
+                items = []
             }
-            ret.push(el)
+            if (endDate === null) endDate = el.dt
+            startDate = el.dt
+            name = el.name
+            isEnd = el.is_end
+            items.push(el)
             totalPrice += parseFloat(el.price / 3600 * el.seconds)
             totalSeconds += parseInt(el.seconds)
             id = el.id
         })
-        if (ret.length > 0) ret.push({
+        if (items.length > 0) ret.push({
+            id,
+            name,
+            isEnd,
             totalPrice: totalPrice.toFixed(2),
-            totalSeconds
+            totalSeconds,
+            startDate,
+            endDate,
+            items
         })
         return ret
     }
