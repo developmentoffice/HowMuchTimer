@@ -12,7 +12,7 @@ howmuchtimer
 ```
 
 ### Windows
-Link: [https://github.com/developmentoffice/HowMuchTimer/releases/download/v1.0.0/howmuchtimer-1.0.0-win.exe](https://github.com/developmentoffice/HowMuchTimer/releases/download/v1.0.0/howmuchtimer-1.0.0-win.exe)
+Link: [https://github.com/developmentoffice/HowMuchTimer/releases/download/v1.1.0/howmuchtimer-1.1.0-win.exe](https://github.com/developmentoffice/HowMuchTimer/releases/download/v1.1.0/howmuchtimer-1.1.0-win.exe)
 
 ## Screenshots
 ### Main screen
