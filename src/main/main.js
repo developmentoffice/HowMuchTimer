@@ -90,7 +90,6 @@ class App
     resetTray()
     {
         this.tray.setImage(nativeImage.createFromPath(path.join(__dirname, '../../images/icons/16.png')))
-        this.tray.setImage(nativeImage.createFromPath(path.join(__dirname, '../../images/icons/16.png')))
         this.tray.setToolTip(this.dict.no_running_tasks)
     }
     createWindow()
